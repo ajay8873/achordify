@@ -40,23 +40,6 @@
 - **Synchronized Real-Time Lyrics**:
   - Word-level and line-synchronized animated lyrics powered by LRCLIB, BetterLyrics, Unison, Genius, and Paxsenix.
 
----
-
-## 🏗️ Architecture & Important Developer Notice
-
-> [!WARNING]
-> ### ⚠️ DO NOT Globally Replace `bitchord` in Codebase Packages
-> If you are contributing to or modifying this repository, **do NOT perform a global search-and-replace of `bitchord` with `achordify` in the source tree!**
-> 
-> Here is why internal package namespaces are intentionally preserved as `com.music.bitchord`:
-> 1. **Native C++ JNI Bindings**: The low-level audio engine and decoder in `app/src/main/cpp` register native JNI function pointers matching the package structure (e.g. `Java_com_music_bitchord_...`). Changing package names causes native linkage to fail with runtime `UnsatisfiedLinkError`, causing the app to crash immediately when playing audio.
-> 2. **Disk Directory Hierarchy**: In Kotlin/Java, package namespaces correspond to directory paths on the filesystem (`com/music/bitchord/...`). Changing declarations without moving hundreds of files causes compilation failures.
-> 3. **Inter-Process Communication (IPC)**: Foreground media playback services and background notification receivers communicate using established intent action strings.
-> 
-> **How Achordify Rebrands Safely**:
-> - **Display App Name**: Set in `app/src/main/res/values/strings.xml` (`<string name="app_name">Achordify</string>`).
-> - **Application ID**: Configured in `app/build.gradle.kts` (`applicationId = "com.music.achordify"`).
-> - **Public Repository & Documentation**: All public-facing documentation, assets, and releases use the **Achordify** name.
 
 ---
 
