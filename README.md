@@ -8,7 +8,7 @@
 **Achordify** is a modern, lightweight, privacy-respecting music streaming application for Android and desktop. Built with Kotlin and Jetpack Compose Multiplatform, Achordify delivers an ad-free, high-fidelity listening experience powered by YouTube Music, accompanied by synchronized dynamic lyrics, local audio caching, intelligent multi-seed recommendations, and a dark YouTube Music-inspired user interface.
 
 > [!NOTE]
-> **Attribution & Upstream Lineage**: Achordify is an independent fork of the open-source [BitChord](https://github.com/bitchord/bitchord) project. We gratefully acknowledge and credit the original BitChord authors and contributors for laying the foundation. In adherence to the **GNU General Public License v3.0 (GPLv3)**, Achordify is fully open-source, keeps all original license notices, and makes its modifications available to the community.
+> **Attribution & Upstream Lineage**: Achordify is an independent fork of the open-source [BitChord](https://github.com/kushagrasinghx/BitChord) project created by [Kushagra Singh](https://github.com/kushagrasinghx). We gratefully acknowledge and credit Kushagra Singh and the BitChord contributors for laying the foundation. In adherence to the **GNU General Public License v3.0 (GPLv3)**, Achordify is fully open-source, keeps all original license notices, and makes its modifications available to the community.
 
 ---
 
@@ -116,5 +116,5 @@ For an in-depth changelog and technical implementation details of all modified c
 Achordify is licensed under the **GNU General Public License v3.0 (GPLv3)**.
 
 - **Copyleft**: Any modifications or derivatives must remain open-source under GPLv3.
-- **Attribution**: Derived from [BitChord](https://github.com/bitchord/bitchord) (Copyright (c) BitChord Contributors).
+- **Attribution**: Derived from [BitChord](https://github.com/kushagrasinghx/BitChord) by [Kushagra Singh](https://github.com/kushagrasinghx) (Copyright (c) BitChord Contributors).
 - **Disclaimer**: Achordify is not affiliated with, endorsed by, or associated with Google LLC, YouTube, or Spotify. All brand names and trademarks belong to their respective owners.
