@@ -163,7 +163,22 @@ fun HomeScreen(
             val t = shelf.title.trim().lowercase()
             t.contains("quick pick") || t.contains("listen again") || t.contains("recents")
         }
-        priorityShelves + otherShelves
+        val seen = mutableSetOf<String>()
+        val deduplicated = mutableListOf<HomeShelf>()
+        for (shelf in (priorityShelves + otherShelves)) {
+            val key = when {
+                shelf.title.equals(RECENTS_TITLE, ignoreCase = true) ||
+                    shelf.title.contains("listen again", ignoreCase = true) ||
+                    shelf.title.contains("recently played", ignoreCase = true) -> "listen_again"
+                shelf.title.contains("quick pick", ignoreCase = true) ||
+                    (shelf.title.contains("quick", ignoreCase = true) && shelf.title.contains("pick", ignoreCase = true)) -> "quick_picks"
+                else -> shelf.title.trim().lowercase()
+            }
+            if (seen.add(key)) {
+                deduplicated.add(shelf)
+            }
+        }
+        deduplicated
     }
 
     PullToRefresh(
@@ -264,10 +279,16 @@ private fun QuickPicksListShelf(
     currentSong: Song? = null,
     isPlaying: Boolean = false,
 ) {
-    val displayTitle = if (shelf.title.equals(RECENTS_TITLE, ignoreCase = true)) {
-        "Quick picks"
-    } else {
-        localizeShelfTitle(shelf.title)
+    val displayTitle = when {
+        shelf.title.equals(RECENTS_TITLE, ignoreCase = true) ||
+            shelf.title.contains("listen again", ignoreCase = true) ||
+            shelf.title.contains("recently played", ignoreCase = true) ->
+            stringResource(Res.string.shelf_listen_again)
+        shelf.title.contains("quick pick", ignoreCase = true) ||
+            (shelf.title.contains("quick", ignoreCase = true) && shelf.title.contains("pick", ignoreCase = true)) ->
+            stringResource(Res.string.shelf_quick_picks)
+        else ->
+            localizeShelfTitle(shelf.title)
     }
     val displaySubtitle = localizeShelfSubtitle(shelf.subtitle)
     val isCurrentItem = shelf.items.playingItemMatcher(currentSong)

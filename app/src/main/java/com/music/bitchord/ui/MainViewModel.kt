@@ -1885,9 +1885,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private fun publishHomeShelves(shelves: List<HomeShelf>, prepend: Boolean = false) {
         val existing = (_home.value as? UiState.Success)?.data.orEmpty()
         if (prepend) {
-            // YouTube's core home can also contain a stale "Recently played"
+            // YouTube's core home can also contain a stale "Recently played" or "Listen again"
             // shelf. The dedicated history endpoint wins and replaces it.
-            val replacing = shelves.map { it.title.lowercase(Locale.ROOT) }.toSet()
+            val incomingKeys = shelves.map { it.title.lowercase(Locale.ROOT) }.toSet()
+            val replacing = if (incomingKeys.any { it == "recents" || it.contains("recent") }) {
+                incomingKeys + setOf("recents", "recently played", "listen again")
+            } else incomingKeys
             homeSeenTitles.addAll(replacing)
             _home.value = UiState.Success(shelves + existing.filterNot {
                 it.title.lowercase(Locale.ROOT) in replacing
@@ -2001,21 +2004,24 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         )
 
         var replaced = false
-        val updatedShelves = shelves.map { shelf ->
+        val updatedShelves = mutableListOf<HomeShelf>()
+        for (shelf in shelves) {
             val t = shelf.title.lowercase(Locale.ROOT)
-            if (!replaced && (t.contains("quick") || t.contains("pick"))) {
-                replaced = true
-                personalizedShelf
+            if (t.contains("quick") && t.contains("pick")) {
+                if (!replaced) {
+                    replaced = true
+                    updatedShelves.add(personalizedShelf)
+                }
             } else {
-                shelf
+                updatedShelves.add(shelf)
             }
         }
 
-        return if (!replaced) {
-            listOf(personalizedShelf) + updatedShelves
-        } else {
-            updatedShelves
+        if (!replaced) {
+            updatedShelves.add(0, personalizedShelf)
         }
+
+        return updatedShelves
     }
 
     /**
